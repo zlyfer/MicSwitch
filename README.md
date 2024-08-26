@@ -1,5 +1,9 @@
+# Fork
+
+This fork changes the behaviour of push-to-talk to remember the state of the microphone before the push-to-talk key was pressed and restore it when the push-to-talk key is released instead of always muting the microphone.
+
 ![](https://img.shields.io/github/release-date/iXab3r/MicSwitch.svg) ![](https://img.shields.io/github/downloads/iXab3r/MicSwitch/total.svg) ![](https://img.shields.io/github/last-commit/iXab3r/MicSwitch.svg)
-[![Discord Chat](https://img.shields.io/discord/513749321162686471.svg)](https://discord.gg/BExRm22)  
+[![Discord Chat](https://img.shields.io/discord/513749321162686471.svg)](https://discord.gg/BExRm22)
 
 # Intro
 There are dozens of different audio chat apps like Discord, TeamSpeak, Ventrilo, Skype, in-game audio chats, etc. And all of them have DIFFERENT ways of handling push-to-talk and always-on microphone functionality. I bet many of you know how distracting it could be when someone forgets to turn off a microphone. I will try to explain what I mean using a feature matrix.
@@ -41,7 +45,7 @@ Also it supports configurable mute/unmute sounds(similar to TeamSpeak/Ventrilo) 
 ![Overlay with configurable size/opacity](https://i.imgur.com/1Jf1RrH.gif)
 
 ### Configurable Audio notification when microphone is muted/unmuted
-![Configurable Audio notification when microphone is muted/unmuted](https://i.imgur.com/TmvJizg.png) 
+![Configurable Audio notification when microphone is muted/unmuted](https://i.imgur.com/TmvJizg.png)
 
 ### Customizable overlay/tray icons
 ![Customizable overlay/tray icons](https://i.imgur.com/Bq0yHnK.png)
@@ -58,7 +62,7 @@ Also it supports configurable mute/unmute sounds(similar to TeamSpeak/Ventrilo) 
 1. git clone https://github.com/iXab3r/MicSwitch.git
 2. cd MicSwitch
 3. remove submodule DeploymentTools - MicSwitch's installer built and oublished as a part of another project and it's not included into this repository
-4. git submodule init 
+4. git submodule init
 5. git submodule update --checkout
 6. InitSymlinks.cmd
 7. dotnet build Sources/MicSwitch
@@ -77,6 +81,6 @@ Meanwhile you could take a look at
 ???
 
 ## Contacts
-- Feel free to contact me via PM in Discord *Xab3r#3780* or [Reddit](https://www.reddit.com/user/Xab3r) 
+- Feel free to contact me via PM in Discord *Xab3r#3780* or [Reddit](https://www.reddit.com/user/Xab3r)
 - [Discord chat](https://discord.gg/BExRm22 "Discord chat")
 - [Issues tracker](https://github.com/iXab3r/MicSwitch/issues)

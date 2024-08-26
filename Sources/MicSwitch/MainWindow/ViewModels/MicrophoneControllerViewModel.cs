@@ -11,6 +11,7 @@ internal sealed class MicrophoneControllerViewModel : MediaControllerBase<MicSwi
 {
     private readonly IConfigProvider<MicSwitchConfig> configProvider;
     private static readonly Binder<MicrophoneControllerViewModel> Binder = new();
+    private bool? initialMicState;
 
     static MicrophoneControllerViewModel()
     {
@@ -33,7 +34,7 @@ internal sealed class MicrophoneControllerViewModel : MediaControllerBase<MicSwi
         HotkeyUnmute = PrepareHotkey("Un-mute microphone", x => x.HotkeyForUnmute, (config, hotkeyConfig) => config.HotkeyForUnmute = hotkeyConfig);
         HotkeyPushToMute = PrepareHotkey("Push-To-Mute", x => x.HotkeyForPushToMute, (config, hotkeyConfig) => config.HotkeyForPushToMute = hotkeyConfig);
         HotkeyPushToTalk = PrepareHotkey("Push-To-Talk", x => x.HotkeyForPushToTalk, (config, hotkeyConfig) => config.HotkeyForPushToTalk = hotkeyConfig);
-         
+
         PrepareTracker(HotkeyMode.Click, HotkeyToggle)
             .ObservableForProperty(x => x.IsActive, skipInitial: true)
             .SubscribeSafe(x =>
@@ -67,8 +68,17 @@ internal sealed class MicrophoneControllerViewModel : MediaControllerBase<MicSwi
             .ObservableForProperty(x => x.IsActive, skipInitial: true)
             .SubscribeSafe(x =>
             {
-                Log.Debug($"[{x.Sender}] Processing push-to-talk hotkey for microphone: {Controller}");
-                Controller.Mute = !x.Value;
+                if (x.Value)
+                {
+                    Log.Debug($"[{x.Sender}] Push-to-talk key pressed for microphone: {Controller}");
+                    initialMicState = Controller.Mute;
+                    Controller.Mute = false;
+                }
+                else
+                {
+                    Log.Debug($"[{x.Sender}] Push-to-talk key released for microphone: {Controller}");
+                    Controller.Mute = initialMicState ?? false;
+                }
             }, Log.HandleUiException)
             .AddTo(Anchors);
 
@@ -100,7 +110,7 @@ internal sealed class MicrophoneControllerViewModel : MediaControllerBase<MicSwi
         configProvider.ListenTo(x => x.VolumeControlEnabled)
             .SubscribeSafe(x => VolumeControlIsEnabled = x, Log.HandleException)
             .AddTo(Anchors);
-        
+
         configProvider.ListenTo(x => x.MicrophoneLineId)
             .SubscribeSafe(x => DeviceId = x, Log.HandleException)
             .AddTo(Anchors);
@@ -209,7 +219,7 @@ internal sealed class MicrophoneControllerViewModel : MediaControllerBase<MicSwi
                     Log.Debug(() => $"Propagating volume from previous controller {x.Previous}: {x.Previous.Volume}");
                     x.Current.Volume = x.Previous.Volume;
                 }
-                
+
                 Log.Debug(() => $"Propagating Mute state from previous controller {x.Previous}: {x.Previous.Mute}");
                 x.Current.Mute = x.Previous.Mute;
             })
